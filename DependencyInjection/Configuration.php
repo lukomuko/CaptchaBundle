@@ -12,7 +12,13 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('gregwar_captcha');
-        $rootNode = $treeBuilder->getRootNode();
+        
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // BC for symfony/config <= 4.1
+            $rootNode = $treeBuilder->root('gregwar_captcha');
+        }
 
         $rootNode
             ->addDefaultsIfNotSet()
